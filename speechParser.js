@@ -133,7 +133,8 @@
 
                     //TODO: PRINT FOR LOOP
                     cursor = editor.getCursor("from");
-                    editor.replaceRange("for(/*init*/;/*condition*/;/*iteration*/){\n\n}", cursor);
+                    editor.replaceRange("for(/*init*/;/*condition*/;/*iteration*/){\n\n", cursor);
+                    editor.replaceRange("}", {line:cursor.line+2,ch:cursor.ch});
                     editor.setCursor(cursor.line,cursor.ch+4);
                     cursor.ch +=4;
                     editor.setSelection(cursor);
@@ -207,7 +208,7 @@
                         cursor = editor.getCursor("from");
                         //might have to change this char index
                         editor.setCursor(cursor.line+1,cursor.ch);
-                        editor.execCommand("defaultTab");
+                        editor.execCommand("insertTab");
 
                         controlStructureTypeOfCurrentLine = 0;
                         return false;
