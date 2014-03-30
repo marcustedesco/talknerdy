@@ -14,7 +14,9 @@ button{
 	font-size: 20px;
 }
 
-.results{									
+.results{	
+	width:75%;	
+	margin: 0 auto;					
 }
 
 .center {
