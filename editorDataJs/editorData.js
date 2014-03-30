@@ -8,51 +8,85 @@ function EditorData() {
 	/**
 	 * Array of indices into structures' children.
 	 */
-	var cursor = [];
+	var cursor = [0];
 	var data = new Program();
 	
-	var getCursorParent = function() {
+	var getCursorParentChildren = function() {
 		var parent = data;
 		for(var i = 0; i < cursor.length - 1; i++) {
 			parent = parent.children[cursor[i]];
 		}
-		return parent;
+		return parent.children;
 	};
 	
 	this.inwards = function() {
-		cursor.push(0);
+		if(isString(this.getAtCursor())) {
+			return false;
+		} else {
+			cursor.push(0);
+			return true;
+		}
 	};
 	
 	this.outwards = function() {
-		cursor.pop();
+		if(cursor.length === 1) {
+			return false;
+		} else {
+			cursor.pop();
+			return true;
+		}
 	};
 	
 	this.forwards = function() {
-		cursor[cursor.length-1]++;
+		if(last(cursor) === getCursorParentChildren().length) {
+			return false;
+		} else {
+			cursor[cursor.length-1]++;
+			return true;
+		}
 	};
 	
 	this.backwards = function() {
-		cursor[cursor.length-1]--;
+		if(last(cursor) === 0) {
+			return false;
+		} else {
+			cursor[cursor.length-1]--;
+			return true;
+		}
 	};
 	
 	this.getAtCursor = function() {
-		return getCursorParent().children[last(cursor)];
+		return getCursorParentChildren()[last(cursor)];
 	};
 	
 	this.setAtCursor = function(datum) {
-		getCursorParent().children[last(cursor)] = datum;
+		if(this.isSomethingAtCursor()) {
+			getCursorParentChildren()[last(cursor)] = datum;
+			return true;
+		} else {
+			return false;
+		}
 	};
 	
 	this.insertAtCursor = function(datum) {
-		getCursorParent().children.splice(last(cursor), 0, datum);
+		getCursorParentChildren().splice(last(cursor), 0, datum);
 	};
 	
 	this.deleteAtCursor = function() {
-		getCursorParent().children.splice(last(cursor), 1);
+		if(this.isSomethingAtCursor()) {
+			getCursorParentChildren().splice(last(cursor), 1);
+			return true;
+		} else {
+			return false;
+		}
 	};
 	
 	this.toHtml = function() {
 		return data.toHtml();
+	};
+	
+	this.isSomethingAtCursor = function() {
+		return last(cursor) !== getCursorParentChildren().length;
 	};
 }
 
