@@ -147,7 +147,7 @@ ForLoopLine.prototype.isEndOperationFilledOut = function(wlToCheck) {
 		{
 			if(wlToCheck[i].localeCompare(common_Decrement_Parses[j]) == 0)
 			{
-				if(i+1 < wlToCheck[wlToCheck.length) //As long as there is a value after..
+				if(i+1 < wlToCheck[wlToCheck.length-1]) //As long as there is a value after..
 				{
 					var endValue = wlToCheck[wlToCheck.length - 1]; //Value will be last in word list
 					this.variableEndOperation = this.variableUsedForComparison + " = " + this.variableUsedForComparison + " - " + endValue;

@@ -72,6 +72,7 @@
                     //interpret(raw);*/
 
                     singleLineInput += event.results[r][0].transcript;
+                    //document.getElementById('rawtext').innerHTML = "";
                     document.getElementById('rawtext').innerHTML = "\"" + singleLineInput + "\"";
 
                     //If parseRawInput returned false (which it will when user has moved onto new line) then call newLine()
@@ -84,7 +85,8 @@
                         event.results = [];
 
                         //Initialize new line
-                        newLine();
+                        //newLine();
+                        singleLineInput = '';
                     }
                     //document.getElementById('code-pallet').innerHTML = event.results[i][0].transcript;
                     //editor.setValue(singleLineInput);
@@ -174,6 +176,7 @@
                             break;
                         }
                     }
+                    return false;
                 }
                 else if(is_Main(resultWordArray))
                 {
@@ -183,6 +186,7 @@
                     editor.replaceRange("public static void main(String[] args){\n\n}", cursor);
                     editor.setCursor(cursor.line+1,cursor.ch);
                     editor.execCommand("defaultTab");
+                    return false;
                 }
 
                 else if(is_Definatly_Not_A_Control_Struct(resultWordArray))
@@ -223,13 +227,16 @@
                         editor.setCursor(cursor.line+1,cursor.ch);
                         editor.execCommand("defaultTab");
                     }
-                    //alert("Done");
-                    //return false;
                     
                     if(currentLineType.isAllFilledOut(resultWordArray)){
-                        alert("Done");
+                        //alert("Done");
+                        controlStructureTypeOfCurrentLine = 0;
                         return false;
                     }
+                }
+                else{
+                    controlStructureTypeOfCurrentLine = 0;
+                    return false;
                 }
             }
 
@@ -244,7 +251,7 @@
             var common_For_Parse_MisIdentities = new Array("4", "four");
             var forText = "for";
 
-            var common_Loop_Parse_MisIdentities = new Array("Luke", "leaf", "loot");
+            var common_Loop_Parse_MisIdentities = new Array("Luke", "leaf", "loot", "loops");
             var loopText = "loop";
 
             var common_merged_MisIdentities = new Array("Hulu");
@@ -431,11 +438,11 @@
             return false;
         }
 
-        function newLine()
+        /*function newLine()
         {
             alert('creating New line');
             singleLineInput = '';
-        }
+        }*/
 
     });
 })(jQuery);
