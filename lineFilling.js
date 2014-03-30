@@ -262,20 +262,44 @@ VariableChangeLine.prototype.create = function(wlToCheck) {
 	}
 
 	return false;
-}
+};
 
 
 /* While Loop */
 
-/*function WhileLoopLine() {
+function WhileLoopLine() {
 	this.resultToPrint = "";
 }
 
-WhileLoopLine.prototype.create = function(wlToCheck) {
-	var 
+WhileLoopLine.prototype.create = function(wlToCheck) 
+{
+	var common_While_Parses = new Array("while", "While", "wild");
+	var common_Equals_Parses = new Array("equals", "equal");
 
+	//Start @ i+2 because i+1 is the name of the variable
+	for(var i = 0; i < wlToCheck.length; ++i)
+	{
+		for(var j = 0; j < common_While_Parses.length; ++j)
+		{
+			if(common_While_Parses[j].localeCompare(wlToCheck[i]) == 0 && i + 2 < wlToCheck.length)
+			{
+				for(var k = i + 2; k < wlToCheck.length; ++k)
+				{
+					for(var l = 0; l < common_Equals_Parses.length; ++l)
+					{
+						if(common_Equals_Parses[l].localeCompare(wlToCheck[k]))
+						{
+							if(k + 1 < wlToCheck.length)
+							{
+								this.resultToPrint = "while(" + wlToCheck[i+1] + " == " + wlToCheck[k+1] + ")";
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
-
-}*/
-
-
+	return false;
+};
