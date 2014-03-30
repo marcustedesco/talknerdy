@@ -36,7 +36,18 @@
       <div class="raw top40">
         <p id="rawtext">"Raw speech -> text"</p>
       </div>
-       
+      <table>
+	<tr><td>What you say</td><td>What you get</td></tr>
+	<tr><td>"Make main method"</td><td>Main method; cursor inside</td></tr>
+	<tr><td>"Make for loop"</td><td>Empty for loop; cursor at initialization</td></tr>
+	<tr><td>"Integer $name equals $value"</td><td>int $name = $value;</td></tr>
+	<tr><td>"String $name equals $value"</td><td>String $name = "$value";</td></tr>
+	<tr><td>"$name is less than $value" (in a for loop)</td><td>$name < $value</td></tr>
+	<tr><td>"Increment $name by $amount" (in a for loop)</td><td>$name += $amount</td></tr>
+	<tr><td>"Make comment $comment"</td><td>//$comment</td></tr>
+	<tr><td>"Make while loop"</td><td>Empty while loop; cursor at condition</td></tr>
+	<tr><td>"Print $string"</td><td>System.out.println($string);</td></tr>
+       </table>
   </div>
 </div>
 </body>
