@@ -143,11 +143,18 @@
 
                 }
 
-                /*else if(is_While_Loop(resultWordArray))
+                else if(is_While_Loop(resultWordArray))
                 {
                     controlStructureTypeOfCurrentLine = 2;
+                    alert("It's a while");
+
+                    var whileLoopLine = new WhileLoopLine();
+                    whileLoopLine
+
+
                 }
 
+                
                 else if(is_If_Statement(resultWordArray))
                 {
                     controlStructureTypeOfCurrentLine = 3;
@@ -161,7 +168,7 @@
                 else if(is_ElseIf_Statement(resultWordArray))
                 {
                     controlStructureTypeOfCurrentLine = 5;
-                }*/
+                }
 
                 else if(is_Jump(resultWordArray))
                 {
@@ -220,7 +227,20 @@
                 {
                     controlStructureTypeOfCurrentLine = 8;
                 }
-                
+
+                //Declaring value
+                else
+                {
+                    var declarationStatement = new VariableChangeLine();
+                    if(declarationStatement.create(resultWordArray))
+                    {
+                        cursor = editor.getCursor("from");
+                        editor.replaceSelection(declarationStatement.resultToPrint + "\n");
+                        editor.setCursor(cursor.line+1,cursor.ch);
+
+                        return false;
+                    }
+                }
             }
 
             //Control Structure is known or it's know that it's definatly not a control structure.
@@ -245,7 +265,8 @@
 
                     else
                     {
-                        if(currentLineType.declarationFilledOut && !currentLineType.conditionFilledOut && ! currentLineType.printedDeclaration){
+                        if(currentLineType.declarationFilledOut && !currentLineType.conditionFilledOut && ! currentLineType.printedDeclaration)
+                        {
                             //alert(currentLineType.variableDeclaration);
                             editor.replaceSelection(currentLineType.variableDeclaration);
                             cursor = editor.getCursor("from");
@@ -253,7 +274,9 @@
                             currentLineType.printedDeclaration = true;
 
                         }
-                        if(currentLineType.conditionFilledOut && !currentLineType.endOperationFilledOut && !currentLineType.printedCondition){
+
+                        if(currentLineType.conditionFilledOut && !currentLineType.endOperationFilledOut && !currentLineType.printedCondition)
+                        {
                             //alert(currentLineType.variableCondition);
                             editor.replaceSelection(currentLineType.variableCondition);
                             cursor = editor.getCursor("from");
@@ -263,7 +286,8 @@
                     }
                 }
 
-                else{
+                else
+                {
                     controlStructureTypeOfCurrentLine = 0;
                     return false;
                 }
@@ -357,6 +381,19 @@
 
         function is_While_Loop(possibleWhile)
         {
+            var common_While_Parses = new Array("while", "While", "wild");
+
+            for(var i = 0; i < possibleWhile.length; ++i)
+            {
+                for(var j = 0; j < common_While_Parses.length; ++j)
+                {
+                    if(common_While_Parses[j].localeCompare(possibleWhile[i]) == 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
             return false;
         }
 
@@ -375,7 +412,8 @@
             return false;
         }
 
-        function is_Jump(possibleJump){
+        function is_Jump(possibleJump)
+        {
             //change this so not case sensitive
             var jumpText = "jump";
 

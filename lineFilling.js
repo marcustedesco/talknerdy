@@ -2,6 +2,7 @@
   * Contains the Classes for each of the line types (for, while, if, else if, else, variable declaration, variable value setting)
   **/
 
+										/* FOR LOOPS */
  function ForLoopLine() {
 
     this.declarationFilledOut = false;
@@ -192,3 +193,89 @@ ForLoopLine.prototype.isAllFilledOut = function(wordListToCheck) {
 
 	return true;
 };
+
+
+					/*Declaring variable*/
+ function VariableChangeLine() {
+ 	this.resultToPrint = "";
+ }
+
+VariableChangeLine.prototype.create = function(wlToCheck) {
+	var common_Int_Parses = new Array("integer", "in", "int");
+	var common_String_Parses = new Array("String", "string");
+	var common_Equals_Parses = new Array("equals", "equal");
+
+	var isInteger = false;
+	var isString = false;
+	var typeIndex = 0;
+
+	for(var i = 0; i < wlToCheck.length; ++i)
+	{
+		for(var j = 0; j < common_Int_Parses.length; ++j)
+		{
+			if(wlToCheck[i].localeCompare(common_Int_Parses[j]) == 0)
+			{
+				isInteger = true;
+				typeIndex = i;
+			}
+		}
+
+		for(var j = 0; j < common_String_Parses.length; ++j)
+		{
+			if(wlToCheck[i].localeCompare(common_String_Parses[j]) == 0)
+			{
+				isInteger = true;
+				typeIndex = i;
+			}
+		}
+
+		if(isInteger || isString)
+		{
+			//Start @ i+2 because i+1 is the name of the variable
+			for(var k = i + 2; k < wlToCheck.length; ++k)
+			{
+				for(var l = 0; l < common_Equals_Parses.length; ++l)
+				{
+					if(wlToCheck[k].localeCompare(common_Equals_Parses[l]) == 0)
+					{
+						//Make sure won't go out of bounds when getting value
+						if(k+1 < wlToCheck.length)
+						{
+							//integer
+							if(isInteger)
+							{
+								this.resultToPrint = "int " + wlToCheck[i+1] + " = " + wlToCheck[k+1] + ";";
+							}
+
+							//String
+							else
+							{
+								this.resultToPrint = "String " + wlToCheck[i+1] + " = \"" + wlToCheck[k+1] + "\";";
+							}
+
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+
+/* While Loop */
+
+/*function WhileLoopLine() {
+	this.resultToPrint = "";
+}
+
+WhileLoopLine.prototype.create = function(wlToCheck) {
+	var 
+
+
+
+}*/
+
+
