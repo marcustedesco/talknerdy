@@ -18,7 +18,10 @@
         var stackOfTags = new ControlStructureStack();
 
         //A single line of input (will reset (become empty) for every new line)
-        var singleLineInput = '';
+        var currentLineInput = '';
+
+        //Current Line's LineType (each type has a class)
+        var currentLineType = new Object();
 
         /* Signifies which control structure parseRawInput() thinks the current line is
          * 0 : unknown
@@ -29,7 +32,7 @@
          * 5 : else if statement
          * 6 : Not a control structure
          */
-        var controlStructureTypeOfCurrentLine = 0;
+        var controlStructureTypeOfCurrentLine = 0; 
 
         //When being-recording button is clicked..
         $('.begin-recording').click(function(){
@@ -40,6 +43,12 @@
             recognition.stop();
         });
 
+        function newLine()
+        {
+            alert('creating New line');
+            currentLineInput = '';
+        }
+
         /* 
          * When speech parser webkitSpeechRecognition returns a result.. 
          */
@@ -48,11 +57,11 @@
             //Go through the results, only selecting one that webkitSpeechRecognition decided was final..
             for (var rI = event.resultIndex; rI < event.results.length; ++rI) {
                 if (event.results[rI].isFinal) {
-                    singleLineInput += event.results[rI][0].transcript;
-                    divToPutSpokenCodeIn.innerHTML = singleLineInput;
+                    currentLineInput += event.results[rI][0].transcript;
+                    divToPutSpokenCodeIn.innerHTML = currentLineInput;
 
                     //If parseRawInput returned false (which it will when user has moved onto new line) then call newLine()
-                    if(!parseRawInput(singleLineInput)) {
+                    if(!parseRawInput(currentLineInput)) {
 
                         //TODO: Add completed line to currentCode
 
@@ -65,7 +74,7 @@
                     }
                     //alert(event.results[i][0].transcript);
                     //var divToPut =  document.getElementById('code-palette').innerHTML = event.results[i][0].transcript;
-                    document.getElementById('code-pallet').innerHTML = event.results[i][0].transcript;
+                    document.getElementById('code-pallet').innerHTML = event.results[rI][0].transcript;
                 }
             }
         };
@@ -80,7 +89,7 @@
 
         function parseRawInput(currentEventResult)
         {
-            resultWordArray = currentEventResult.split(" ");
+            var resultWordArray = currentEventResult.split(" ");
             //If control structure of current line is unkown...
             if(controlStructureTypeOfCurrentLine == 0)
             {
@@ -89,7 +98,12 @@
                 if(is_For_Loop(resultWordArray))
                 {
                     controlStructureTypeOfCurrentLine = 1;
-                    alert('Is a for loop');
+                    stackOfTags.pushCS(controlStructureTypeOfCurrentLine);
+
+                    currentLineType = new ForLoopLine();
+
+                    //TODO: PRINT FOR LOOP
+
                 }
 
                 else if(is_While_Loop(resultWordArray))
@@ -122,7 +136,13 @@
             //Control Structure is known or it's know that it's definatly not a control structure.
             else
             {
-               // alert("Know it's definatly a number" + controlStructureTypeOfCurrentLine);
+                //alert("Know it's definatly a number" + controlStructureTypeOfCurrentLine);
+                if(controlStructureTypeOfCurrentLine == 1 && currentLineType.isAllFilledOut(resultWordArray))
+                {
+                    // DONE --> return false
+                    alert("Done");
+                    return false;
+                }
             }
 
             return true;
@@ -139,7 +159,9 @@
             var common_Loop_Parse_MisIdentities = new Array("Luke", "leaf");
             var loopText = "loop";
 
-            for(var i = 0; i < possibleFor.length; ++i) 
+            var common_merged_MisIdentities = new Array("Hulu");
+
+            for(var i = 0; i < possibleFor.length; ++i)
             {
 
                 //Certain it's a for
@@ -195,6 +217,14 @@
                             }
                         }
                     }
+
+                    for(var mI = 0; mI < common_merged_MisIdentities.length; ++mI)
+                    {
+                        if(common_merged_MisIdentities[mI].localeCompare(possibleFor[i]) == 0)
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
 
@@ -224,12 +254,6 @@
         function is_Definatly_Not_A_Control_Struct(possibleNonCS)
         {
             return false;
-        }
-
-        function newLine()
-        {
-            alert('creating New line');
-            singleLineInput = '';
         }
     });
 })(jQuery);
