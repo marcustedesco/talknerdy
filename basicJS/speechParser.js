@@ -63,6 +63,9 @@
                         //Initialize new line
                         newLine();
                     }
+                    //alert(event.results[i][0].transcript);
+                    //var divToPut =  document.getElementById('code-palette').innerHTML = event.results[i][0].transcript;
+                    document.getElementById('code-pallet').innerHTML = event.results[i][0].transcript;
                 }
             }
         };
