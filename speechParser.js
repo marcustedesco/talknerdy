@@ -200,35 +200,35 @@
             
                 if(controlStructureTypeOfCurrentLine == 1)
                 {
+                    currentLineType.isAllFilledOut(resultWordArray);
+
+                    if(currentLineType.declarationFilledOut && !currentLineType.conditionFilledOut){
+                        //alert(currentLineType.variableDeclaration);
+                        editor.replaceSelection(currentLineType.variableDeclaration);
+                        var cursor = editor.getCursor("from");
+                        editor.setSelection({line:cursor.line,ch:cursor.ch+1}, {line:cursor.line,ch:cursor.ch+14});
+
+                    }
+                    if(currentLineType.conditionFilledOut && !currentLineType.endOperationFilledOut){
+                        //alert(currentLineType.variableCondition);
+                        editor.replaceSelection(currentLineType.variableCondition);
+                        var cursor = editor.getCursor("from");
+                        editor.setSelection({line:cursor.line,ch:cursor.ch+1}, {line:cursor.line,ch:cursor.ch+14});
+                    }
+                    if(currentLineType.endOperationFilledOut){
+                        //alert(currentLineType.variableEndOperation);
+                        editor.replaceSelection(currentLineType.variableEndOperation);
+                        var cursor = editor.getCursor("from");
+                        //might have to change this char index
+                        editor.setCursor(cursor.line+1,cursor.ch);
+                        editor.execCommand("defaultTab");
+                    }
+                    //alert("Done");
+                    //return false;
+                    
                     if(currentLineType.isAllFilledOut(resultWordArray)){
                         alert("Done");
                         return false;
-                    }
-                    else{
-                        // DONE --> return false
-                        if(currentLineType.declarationFilledOut && !currentLineType.conditionFilledOut){
-                            //alert(currentLineType.variableDeclaration);
-                            editor.replaceSelection(currentLineType.variableDeclaration);
-                            var cursor = editor.getCursor("from");
-                            editor.setSelection({line:cursor.line,ch:cursor.ch+1}, {line:cursor.line,ch:cursor.ch+14});
-
-                        }
-                        if(currentLineType.conditionFilledOut && !currentLineType.endOperationFilledOut){
-                            //alert(currentLineType.variableCondition);
-                            editor.replaceSelection(currentLineType.variableCondition);
-                            var cursor = editor.getCursor("from");
-                            editor.setSelection({line:cursor.line,ch:cursor.ch+1}, {line:cursor.line,ch:cursor.ch+14});
-                        }
-                        if(currentLineType.endOperationFilledOut){
-                            //alert(currentLineType.variableEndOperation);
-                            editor.replaceSelection(currentLineType.variableEndOperation);
-                            var cursor = editor.getCursor("from");
-                            //might have to change this char index
-                            editor.setCursor(cursor.line+1,cursor.ch);
-                            editor.execCommand("defaultTab");
-                        }
-                        //alert("Done");
-                        //return false;
                     }
                 }
             }
