@@ -146,12 +146,16 @@
                 else if(is_While_Loop(resultWordArray))
                 {
                     controlStructureTypeOfCurrentLine = 2;
-                    alert("It's a while");
 
                     var whileLoopLine = new WhileLoopLine();
-                    whileLoopLine
 
-
+                    if(whileLoopLine.create(resultWordArray))
+                    {
+                        cursor = editor.getCursor("from");
+                        editor.replaceSelection(whileLoopLine.resultToPrint + "\n{\n\n\n\n}");
+                        editor.setCursor(cursor.line+2, cursor.ch);
+                        return false;
+                    }
                 }
 
                 
