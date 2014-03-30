@@ -33,21 +33,20 @@
 <body id="body">
 <div id="wrap">
   <div class="container">
-      <div class="raw top40">
-        <p id="rawtext">"Raw speech -> text"</p>
-      </div>
-      <table>
-	<tr><td>What you say</td><td>What you get</td></tr>
-	<tr><td>"Make main method"</td><td>Main method; cursor inside</td></tr>
-	<tr><td>"Make for loop"</td><td>Empty for loop; cursor at initialization</td></tr>
-	<tr><td>"Integer $name equals $value"</td><td>int $name = $value;</td></tr>
-	<tr><td>"String $name equals $value"</td><td>String $name = "$value";</td></tr>
-	<tr><td>"$name is less than $value" (in a for loop)</td><td>$name < $value</td></tr>
-	<tr><td>"Increment $name by $amount" (in a for loop)</td><td>$name += $amount</td></tr>
-	<tr><td>"Make comment $comment"</td><td>//$comment</td></tr>
-	<tr><td>"Make while loop"</td><td>Empty while loop; cursor at condition</td></tr>
-	<tr><td>"Print $string"</td><td>System.out.println($string);</td></tr>
-       </table>
+      <table class="commandlist top40 center">
+      	<tr><td><strong>Speech command</strong></td><td><strong>What you get</strong></td></tr>
+      	<tr><td>"make main method"</td><td>public static void main(String args[]){}</td></tr>
+      	<tr><td>"make for loop"</td><td>for(/*init*/;/*condition*/;/*iteration*/){} //cursor selecting intialization</td></tr>
+        <tr><td>"integer i equals 0***"</td><td>int i = 0;</td></tr>
+        <tr><td>"i is less than 300***"</td><td>i < 300</td></tr>
+        <tr><td>"increment i by 3***"</td><td>i = i + 3</td></tr>
+      	<tr><td>"integer foo equals 7"</td><td>int foo = 7;</td></tr>
+      	<tr><td>"string foo equals hack"</td><td>String foo = "hack";</td></tr>
+      	<tr><td>"make comment this is awesome"</td><td>//this is awesome</td></tr>
+      	<tr><td>"while x equals 7"</td><td>while(x == 7)</td></tr>
+      	<tr><td>"print hello world"</td><td>System.out.println("hello world");</td></tr>
+      </table>
+      <p class="raw">***these are used during for loop prompt</p>
   </div>
 </div>
 </body>

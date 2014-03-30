@@ -1,31 +1,3 @@
-.gps_ring {
-    border: 3px solid #999;
-    -webkit-border-radius: 30px;
-    height: 18px;
-    width: 18px;
-    
-    position: relative;
-}
-.gps_ring{
-    -webkit-animation-name: pulsate;
-    -webkit-animation-duration: 1s;
-    -webkit-animation-timing-function: ease-in-out;
-    -webkit-animation-iteration-count: infinite
-}
-@-webkit-keyframes pulsate {
-    0% { width:1px;height: 1px; opacity: 0.0}
-    10% { width:3px;height: 3px; opacity: .20}
-    20% { width:5px;height: 5px; opacity: .40 }
-    30% { width:7px;height: 7px; opacity: .60 }
-    40% { width:9px;height: 9px; opacity: .80 }    
-    50% { width:11px;height: 11px; opacity: 1.0}
-    60% { width:13px;height: 13px; opacity: .80}
-    70% { width:15px;height: 15px;  opacity: .60}
-    80% { width:17px;height: 17px;  opacity: .40}
-    90% { width:19px;height: 19px;  opacity: .20}
-    100% { width:21px;height: 21px;  opacity: 0.0}
-}
-
 body{
 	background-color: gray; /*#660000;*/
 }
@@ -36,10 +8,22 @@ button{
 	border:0;
 }
 
+.commandlist tr,td{
+	border: 2px solid #ff6600;
+	padding:3px;
+	color: white;
+	font-size: 20px;
+}
+
 .raw{
 	text-align: center;
 	color: white;
 	font-size: 20px;
+}
+
+.howto{
+	text-align: center;
+	color: white;
 }
 
 .results{	
