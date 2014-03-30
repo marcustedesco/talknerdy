@@ -7,7 +7,6 @@ function ControlStructureStack() {
 
 
 ControlStructureStack.prototype.pushCS = function(typeIntegerRepresentationToPush) {
-	alert(typeIntegerRepresentationToPush);
 	this.listOfControlStructures[this.indexOfTop + 1] = typeIntegerRepresentationToPush;
 	this.indexOfTop++;
 };

@@ -137,6 +137,8 @@
             else
             {
                 //alert("Know it's definatly a number" + controlStructureTypeOfCurrentLine);
+                //if(controlStructureTypeOfCurrentLine == 1 && currentLineType.isAllFilledOut(["int", "i", "equals", "8", "while", "i", "is", "less", "than", "7", "fds", "fdsds", "increments", "by", "7"]))
+
                 if(controlStructureTypeOfCurrentLine == 1 && currentLineType.isAllFilledOut(resultWordArray))
                 {
                     // DONE --> return false
