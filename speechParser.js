@@ -49,8 +49,15 @@
 
         $('.begin-recording').click(function(){
             recognition.start();
+            $('.recording-button').removeClass('begin-recording').addClass('end-recording');
         });
 
+        $('.end-recording').click(function(){
+            recognition.stop();
+            $('.recording-button').removeClass('end-recording').addClass('begin-recording');
+        });
+
+        //could take this out
         $('.speech-mic-works').click(function(){
             recognition.stop();
         });
@@ -102,23 +109,32 @@
                 //Go through all possible
                 if(is_For_Loop(resultWordArray))
                 {
-                    controlStructureTypeOfCurrentLine = 1;
+                    /*controlStructureTypeOfCurrentLine = 1;*/
                     //alert('Is a for loop');
                     //editor.setValue("for(;;){\n\n}");
 
                     //editor.setLineContent(editor.cursorLine(),"for(;;){\n\n}");
                     //editor.setLineContent(editor.currentLine(),"for(;;){\n\n}");
-                    var cursor = editor.getCursor("from");
-                    editor.replaceRange("for(/*init*/;/*condition*/;/*iteration*/){\n\n}", cursor);
-                    editor.setCursor(cursor.line,cursor.ch+4);
-                    cursor.ch +=4;
-                    editor.setSelection(cursor);
-                    var cursor2 = editor.getCursor("from");
-                    editor.setSelection(cursor2, {line:cursor2.line,ch:cursor2.ch+8});//cursor3);
-                    //editor.replaceRange("i = 0", cursor2, cursor3);
-                    editor.replaceSelection("i = 0");
-                    var cursor3 = editor.getCursor("from");
-                    editor.setSelection({line:cursor3.line,ch:cursor3.ch+1}, {line:cursor3.line,ch:cursor3.ch+14});
+                    
+                    //----------------
+                    // var cursor = editor.getCursor("from");
+                    // editor.replaceRange("for(/*init*/;/*condition*/;/*iteration*/){\n\n}", cursor);
+                    // editor.setCursor(cursor.line,cursor.ch+4);
+                    // cursor.ch +=4;
+                    // editor.setSelection(cursor);
+                    // var cursor2 = editor.getCursor("from");
+                    // editor.setSelection(cursor2, {line:cursor2.line,ch:cursor2.ch+8});//cursor3);
+                    // //editor.replaceRange("i = 0", cursor2, cursor3);
+                    // editor.replaceSelection("i = 0");
+                    // var cursor3 = editor.getCursor("from");
+                    // editor.setSelection({line:cursor3.line,ch:cursor3.ch+1}, {line:cursor3.line,ch:cursor3.ch+14});
+                
+                    controlStructureTypeOfCurrentLine = 1;
+                    stackOfTags.pushCS(controlStructureTypeOfCurrentLine);
+
+                    currentLineType = new ForLoopLine();
+
+                    //TODO: PRINT FOR LOOP
                 }
 
                 else if(is_While_Loop(resultWordArray))
@@ -136,7 +152,7 @@
                     controlStructureTypeOfCurrentLine = 4;
                 }
 
-                else if(is_ElseIF_Statement(resultWordArray))
+                else if(is_ElseIf_Statement(resultWordArray))
                 {
                     controlStructureTypeOfCurrentLine = 5;
                 }
@@ -171,7 +187,15 @@
             //Control Structure is known or it's know that it's definatly not a control structure.
             else
             {
-               // alert("Know it's definatly a number" + controlStructureTypeOfCurrentLine);
+               //alert("Know it's definatly a number" + controlStructureTypeOfCurrentLine);
+                //if(controlStructureTypeOfCurrentLine == 1 && currentLineType.isAllFilledOut(["int", "i", "equals", "8", "while", "i", "is", "less", "than", "7", "fds", "fdsds", "increments", "by", "7"]))
+
+                if(controlStructureTypeOfCurrentLine == 1 && currentLineType.isAllFilledOut(resultWordArray))
+                {
+                    // DONE --> return false
+                    alert("Done");
+                    return false;
+                }
             }
 
             return true;
@@ -188,7 +212,9 @@
             var common_Loop_Parse_MisIdentities = new Array("Luke", "leaf");
             var loopText = "loop";
 
-            for(var i = 0; i < possibleFor.length; ++i) 
+            var common_merged_MisIdentities = new Array("Hulu");
+
+            for(var i = 0; i < possibleFor.length; ++i)
             {
 
                 //Certain it's a for
@@ -244,6 +270,14 @@
                             }
                         }
                     }
+
+                    for(var mI = 0; mI < common_merged_MisIdentities.length; ++mI)
+                    {
+                        if(common_merged_MisIdentities[mI].localeCompare(possibleFor[i]) == 0)
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
 
@@ -265,7 +299,7 @@
             return false;
         }
 
-        function is_ElseIF_Statement(possibleElseIf)
+        function is_ElseIf_Statement(possibleElseIf)
         {
             return false;
         }
