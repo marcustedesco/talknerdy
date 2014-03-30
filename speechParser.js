@@ -197,6 +197,60 @@
                     controlStructureTypeOfCurrentLine = 0;
                     return false;
                 }
+                else if(is_Comment(resultWordArray))
+                {
+
+                    // cursor = editor.getCursor("from");
+                    // editor.replaceRange("public static void main(String[] args){\n\n}", cursor);
+                    // editor.setCursor(cursor.line+1,cursor.ch);
+                    // editor.execCommand("defaultTab");
+                    var commentText = "comment";
+                    var found = false;
+                    for(var i = 0; i < resultWordArray.length; ++i) 
+                    {
+                        if(found){
+                            cursor = editor.getCursor("from");
+                            editor.replaceRange(resultWordArray[i] + " ", cursor);
+                        }
+                        //Certain it's a comment
+                        if(commentText.localeCompare(resultWordArray[i]) == 0)
+                        {
+                            found = true;
+                            cursor = editor.getCursor("from");
+                            editor.replaceRange("\/\/", cursor);
+                        }
+                    }
+                    cursor = editor.getCursor("from");
+                    editor.replaceRange("\n", cursor);
+                    editor.setCursor(cursor.line+1,cursor.ch);
+                    controlStructureTypeOfCurrentLine = 0;
+                    return false;
+                }
+
+                else if(is_Print(resultWordArray))
+                {
+                    var printText = "print";
+                    var found = false;
+                    for(var i = 0; i < resultWordArray.length; ++i) 
+                    {
+                        if(found){
+                            cursor = editor.getCursor("from");
+                            editor.replaceRange(resultWordArray[i] + " ", cursor);
+                        }
+                        //Certain it's a print
+                        if(printText.localeCompare(resultWordArray[i]) == 0)
+                        {
+                            found = true;
+                            cursor = editor.getCursor("from");
+                            editor.replaceRange("System.out.println(\"", cursor);
+                        }
+                    }
+                    cursor = editor.getCursor("from");
+                    editor.replaceRange("\");\n", cursor);
+                    editor.setCursor(cursor.line+1,cursor.ch);
+                    controlStructureTypeOfCurrentLine = 0;
+                    return false;
+                }
 
                 else if(is_Definatly_Not_A_Control_Struct(resultWordArray))
                 {
@@ -232,7 +286,7 @@
                         cursor = editor.getCursor("from");
                         //might have to change this char index
                         editor.setCursor(cursor.line+1,cursor.ch);
-                        editor.execCommand("insertTab");
+                        editor.execCommand("autoIndent");
 
                         controlStructureTypeOfCurrentLine = 0;
                         return false;
@@ -468,6 +522,38 @@
                             }
                         }
                     }
+                }
+            }
+
+            return false;
+        }
+
+        function is_Comment(possibleComment){
+            //change this so not case sensitive
+            var commentText = "comment";
+
+            for(var i = 0; i < possibleComment.length; ++i) 
+            {
+                //Certain it's a comment
+                if(commentText.localeCompare(possibleComment[i]) == 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function is_Print(possiblePrint){
+            //change this so not case sensitive
+            var printText = "print";
+
+            for(var i = 0; i < possiblePrint.length; ++i) 
+            {
+                //Certain it's a print
+                if(printText.localeCompare(possiblePrint[i]) == 0)
+                {
+                    return true;
                 }
             }
 
