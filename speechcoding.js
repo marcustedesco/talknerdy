@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    
+    //alert("ready");
     $('#go').on('click', function(e){
         searchGo();
     });

@@ -1,0 +1,50 @@
+body{
+	background-color: gray; /*#660000;*/
+}
+
+button{
+	outline: 0;
+	background: none;
+	border:0;
+}
+
+.raw{
+	text-align: center;
+	color: white;
+	font-size: 20px;
+}
+
+.results{									
+}
+
+.center {
+	width: 50%;
+    margin: 0 auto;
+}
+
+.top20{
+	margin-top: 20px;
+}
+.top40{
+	margin-top: 40px;
+}
+
+.micCircle {
+    border-radius: 50%;
+    behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+
+    width: 75px;
+    height: 75px;
+    padding: 5px;
+
+    background: #fff;
+    border: 2px solid #ff6600;
+    color: #666;
+    text-align: center;
+}
+
+/*#results{
+	border: 2px solid #666;
+	min-height: 150px;
+	margin-bottom: 20px;
+}*/

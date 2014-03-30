@@ -1,0 +1,82 @@
+.ex_body {
+	background-color: black;
+}
+
+.navbar-fixed-top {
+	top:40px;
+}
+
+.nav-tabs {
+	border-bottom: none;
+}
+
+@media (min-width: 768px) {
+	.navbar .brand {
+		font-size: 22px;
+		margin-left: 20px;
+	}
+	.navbar .nav-tabs {
+		margin-top: 5px;
+	}
+	.navbar-inner { 
+		min-height: 50px; 
+	}
+	.navbar .options {
+		font-size: 14px;
+	}
+	.navbar .links {
+		margin-right: 20px;
+	}
+}
+
+@media (max-width: 768px) {
+	.navbar .brand {
+		font-size: 12px;
+	    margin-left: 10px;
+	}
+	.navbar .nav-tabs {
+		margin-top: 5px;
+	}
+	.navbar-inner { 
+		min-height: 50px; 
+	}
+	.navbar .options {
+		font-size: 8px;
+	}
+	.navbar .links {
+		margin-right: 10px;
+	}
+}
+
+.navbar .options {
+	font-family: 'Actor', sans-serif;
+}
+
+.navbar {
+	opacity:0.7;
+}
+
+.navbar .brand {
+	/*font-family: 'Gloria Hallelujah', cursive;*/
+	font-family: 'Rock Salt', cursive;
+}
+
+.brandname {
+	font-family: 'Rock Salt', cursive;
+	font-size: 30px;
+	color: #ff6600;
+}
+.brandname:hover,
+.brandname:active
+/*.brandname:visited*/ 
+{
+	color: #660000;
+	text-decoration: none;
+}
+
+.center {
+	text-align: center;
+}
+.topdown {
+	margin-top:40px;
+}
