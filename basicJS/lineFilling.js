@@ -57,7 +57,7 @@ ForLoopLine.prototype.isDeclarationFilledOut = function(wlToCheck) {
 									}
 									
 									this.declarationFilledOut = true;
-									alert(this.variableDeclaration);
+									//alert(this.variableDeclaration);
 									return true;
 								}
 							}
@@ -120,7 +120,7 @@ ForLoopLine.prototype.isConditionFilledOut = function(wlToCheck) {
 						this.variableCondition = this.variableUsedForComparison + ' > ' + String(wlToCheck[i+2]);
 					}
 
-					alert(this.variableCondition);
+					//alert(this.variableCondition);
 
 					this.conditionFilledOut = true;
 					this.lastIndexOfCondition = i+2;
