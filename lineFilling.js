@@ -9,13 +9,14 @@
     this.endOperationFilledOut = false;
 
     this.variableDeclaration = '';
-    this.lastIndexOfDeclaration = 0;
     this.variableUsedForComparison = '';
 
     this.variableCondition = '';
-    this.lastIndexOfCondition = 0;
 
     this.variableEndOperation = '';
+
+    this.printedDeclaration = false;
+    this.printedCondition = false;
 }
 
 /* Determine if declaration commands somewhere in wlToCheck */
@@ -44,7 +45,7 @@ ForLoopLine.prototype.isDeclarationFilledOut = function(wlToCheck) {
 								if(i + k + 1 < wlToCheck.length)
 								{
 									//If parse text directly after 'integer' is equals, then assume variable name is i
-									if(wlToCheck[i+1].localeCompare("equals") == 0)
+									if(wlToCheck[i+1].localeCompare("equals") == 0 || wlToCheck[i+1].localeCompare("equal") == 0)
 									{
 										this.variableUsedForComparison = 'i';
 										this.variableDeclaration = "int i" + " = " + wlToCheck[i + k + 1];
@@ -75,13 +76,13 @@ ForLoopLine.prototype.isDeclarationFilledOut = function(wlToCheck) {
 ForLoopLine.prototype.isConditionFilledOut = function(wlToCheck) {
 
 	//if declaration part already filled out and obviously if declaration's last index is less than the size of the word list (because will be going past that point)
-	if(this.declarationFilledOut && this.lastIndexOfDeclaration < wlToCheck.length)
+	if(this.declarationFilledOut)
 	{
 		var common_Less_Than_Parses = new Array("less", "lesson", "lesson");
 		var common_Greater_Than_Parses = new Array("greater");
 
 	
-		for(var i = this.lastIndexOfDeclaration + 1; i < wlToCheck.length; ++i)
+		for(var i = 0; i < wlToCheck.length; ++i)
 		{
 			var isLessThanComparison = false;
 			var isGreaterThanComparison = false;
@@ -123,7 +124,6 @@ ForLoopLine.prototype.isConditionFilledOut = function(wlToCheck) {
 					//alert(this.variableCondition);
 
 					this.conditionFilledOut = true;
-					this.lastIndexOfCondition = i+2;
 
 					return true;
 				}
@@ -138,10 +138,10 @@ ForLoopLine.prototype.isConditionFilledOut = function(wlToCheck) {
 ForLoopLine.prototype.isEndOperationFilledOut = function(wlToCheck) {
 
 	var common_Decrement_Parses = new Array("decrement", "decremental");
-	var common_Increment_Parses = new Array("increment", "increments", "anchorman");
+	var common_Increment_Parses = new Array("increment", "increments", "anchorman", "incremental");
 
 
-	for(var i = this.lastIndexOfCondition + 1; i < wlToCheck.length; ++i)
+	for(var i = 0; i < wlToCheck.length; ++i)
 	{
 		for(var j = 0; j < common_Decrement_Parses.length; ++j)
 		{
@@ -149,19 +149,20 @@ ForLoopLine.prototype.isEndOperationFilledOut = function(wlToCheck) {
 			{
 				if(i+1 < wlToCheck[wlToCheck.length-1]) //As long as there is a value after..
 				{
-					var endValue = wlToCheck[wlToCheck.length - 1]; //Value will be last in word list
-					this.variableEndOperation = this.variableUsedForComparison + " = " + this.variableUsedForComparison + " - " + endValue;
+					var decrementEndValue = wlToCheck[wlToCheck.length - 1]; //Value will be last in word list
+					this.variableEndOperation = this.variableUsedForComparison + " = " + this.variableUsedForComparison + " - " + decrementEndValue;
 					this.endOperationFilledOut = true;
 					return true;
 				}
 			}
 		}
 
-		for(var j = 0; j < common_Increment_Parses.length; ++j)
+		for(var k = 0; k < common_Increment_Parses.length; ++k)
 		{
-			if(wlToCheck[i].localeCompare(common_Increment_Parses[j]) == 0)
+			if(wlToCheck[i].localeCompare(common_Increment_Parses[k]) == 0)
 			{
-				this.variableEndOperation = this.variableUsedForComparison + " = " + this.variableUsedForComparison + " + " + wlToCheck[i+2];
+				var incrementEndValue = wlToCheck[wlToCheck.length - 1]; //Value will be last in word list
+				this.variableEndOperation = this.variableUsedForComparison + " = " + this.variableUsedForComparison + " + " + incrementEndValue;
 				this.endOperationFilledOut = true;
 				return true;
 			}

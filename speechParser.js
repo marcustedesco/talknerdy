@@ -22,14 +22,16 @@
         //The div to put the spoken code into
         //var divToPutSpokenCodeIn =  document.getElementById('code-palette');
 
-        //Stores ALL code written
-        var currentCode = ''; 
-
         //A stack object that keeps track of open control structures (like for, while, etc.)
         var stackOfTags = new ControlStructureStack();
 
         //A single line of input (will reset (become empty) for every new line)
-        var singleLineInput = '';
+        var singleLineInput = "";
+
+        //Current Line's LineType (each type has a class)
+        var currentLineType = new Object();
+
+        var cursor; //cursor
 
         /* Signifies which control structure parseRawInput() thinks the current line is
          * 0 : unknown
@@ -44,8 +46,6 @@
 
         recognition.continuous = true;
         recognition.interimResults = true;
-
-        var interimResult = '';
 
         $('.begin-recording').click(function(){
             recognition.start();
@@ -66,19 +66,14 @@
         {            
             for (var r = event.resultIndex; r < event.results.length; ++r) {
                 if (event.results[r].isFinal) {
-                    /*var raw = event.results[i][0].transcript;
-                    document.getElementById('rawtext').innerHTML = "\"" + raw + "\"";
-                    editor.setValue(interpret(raw));
-                    //interpret(raw);*/
 
-                    singleLineInput += event.results[r][0].transcript;
+                    singleLineInput = event.results[r][0].transcript;
                     //document.getElementById('rawtext').innerHTML = "";
-                    document.getElementById('rawtext').innerHTML = "\"" + singleLineInput + "\"";
+
 
                     //If parseRawInput returned false (which it will when user has moved onto new line) then call newLine()
                     if(!parseRawInput(singleLineInput)) {
-
-                        //TODO: Add completed line to currentCode
+                        
 
 
                         //Clear events.results (Need to move onto next line)
@@ -86,10 +81,10 @@
 
                         //Initialize new line
                         //newLine();
-                        singleLineInput = '';
+                        singleLineInput = "";
                     }
-                    //document.getElementById('code-pallet').innerHTML = event.results[i][0].transcript;
-                    //editor.setValue(singleLineInput);
+
+                    document.getElementById('rawtext').innerHTML = "\"" + singleLineInput + "\"";
                 }
             }
         };
@@ -97,13 +92,13 @@
         /*
          * When event ends..
          */
-        recognition.onend = function() {
+        /*recognition.onend = function() {
             $('.speech-content-mic').removeClass('speech-mic-works').addClass('speech-mic');
-        };
+        };*/
 
         function parseRawInput(currentEventResult)
         {
-            resultWordArray = currentEventResult.split(" ");
+            var resultWordArray = currentEventResult.split(" ");
             //If control structure of current line is unkown...
             if(controlStructureTypeOfCurrentLine == 0)
             {
@@ -137,7 +132,7 @@
                     currentLineType = new ForLoopLine();
 
                     //TODO: PRINT FOR LOOP
-                    var cursor = editor.getCursor("from");
+                    cursor = editor.getCursor("from");
                     editor.replaceRange("for(/*init*/;/*condition*/;/*iteration*/){\n\n}", cursor);
                     editor.setCursor(cursor.line,cursor.ch+4);
                     cursor.ch +=4;
@@ -147,7 +142,7 @@
 
                 }
 
-                else if(is_While_Loop(resultWordArray))
+                /*else if(is_While_Loop(resultWordArray))
                 {
                     controlStructureTypeOfCurrentLine = 2;
                 }
@@ -165,10 +160,10 @@
                 else if(is_ElseIf_Statement(resultWordArray))
                 {
                     controlStructureTypeOfCurrentLine = 5;
-                }
+                }*/
+
                 else if(is_Jump(resultWordArray))
                 {
-                    controlStructureTypeOfCurrentLine = 6;
                     for(var i = 0; i < resultWordArray.length; ++i) 
                     {
                         if(!isNaN(parseInt(resultWordArray[i]))){
@@ -176,16 +171,18 @@
                             break;
                         }
                     }
+                    controlStructureTypeOfCurrentLine = 0;
                     return false;
                 }
+
                 else if(is_Main(resultWordArray))
                 {
-                    controlStructureTypeOfCurrentLine = 7;
 
-                    var cursor = editor.getCursor("from");
+                    cursor = editor.getCursor("from");
                     editor.replaceRange("public static void main(String[] args){\n\n}", cursor);
                     editor.setCursor(cursor.line+1,cursor.ch);
                     editor.execCommand("defaultTab");
+                    controlStructureTypeOfCurrentLine = 0;
                     return false;
                 }
 
@@ -204,36 +201,38 @@
             
                 if(controlStructureTypeOfCurrentLine == 1)
                 {
-                    currentLineType.isAllFilledOut(resultWordArray);
 
-                    if(currentLineType.declarationFilledOut && !currentLineType.conditionFilledOut){
-                        //alert(currentLineType.variableDeclaration);
-                        editor.replaceSelection(currentLineType.variableDeclaration);
-                        var cursor = editor.getCursor("from");
-                        editor.setSelection({line:cursor.line,ch:cursor.ch+1}, {line:cursor.line,ch:cursor.ch+14});
-
-                    }
-                    if(currentLineType.conditionFilledOut && !currentLineType.endOperationFilledOut){
-                        //alert(currentLineType.variableCondition);
-                        editor.replaceSelection(currentLineType.variableCondition);
-                        var cursor = editor.getCursor("from");
-                        editor.setSelection({line:cursor.line,ch:cursor.ch+1}, {line:cursor.line,ch:cursor.ch+14});
-                    }
-                    if(currentLineType.endOperationFilledOut){
-                        //alert(currentLineType.variableEndOperation);
+                    if(currentLineType.isAllFilledOut(resultWordArray)) {
                         editor.replaceSelection(currentLineType.variableEndOperation);
-                        var cursor = editor.getCursor("from");
+                        cursor = editor.getCursor("from");
                         //might have to change this char index
                         editor.setCursor(cursor.line+1,cursor.ch);
                         editor.execCommand("defaultTab");
-                    }
-                    
-                    if(currentLineType.isAllFilledOut(resultWordArray)){
-                        //alert("Done");
+
                         controlStructureTypeOfCurrentLine = 0;
                         return false;
                     }
+
+                    else
+                    {
+                        if(currentLineType.declarationFilledOut && !currentLineType.conditionFilledOut && ! currentLineType.printedDeclaration){
+                            //alert(currentLineType.variableDeclaration);
+                            editor.replaceSelection(currentLineType.variableDeclaration);
+                            cursor = editor.getCursor("from");
+                            editor.setSelection({line:cursor.line,ch:cursor.ch+1}, {line:cursor.line,ch:cursor.ch+14});
+                            currentLineType.printedDeclaration = true;
+
+                        }
+                        if(currentLineType.conditionFilledOut && !currentLineType.endOperationFilledOut && !currentLineType.printedCondition){
+                            //alert(currentLineType.variableCondition);
+                            editor.replaceSelection(currentLineType.variableCondition);
+                            cursor = editor.getCursor("from");
+                            editor.setSelection({line:cursor.line,ch:cursor.ch+1}, {line:cursor.line,ch:cursor.ch+14});
+                            currentLineType.printedCondition = true;
+                        }
+                    }
                 }
+
                 else{
                     controlStructureTypeOfCurrentLine = 0;
                     return false;
@@ -293,7 +292,7 @@
                             //Go up to 3 past i in the split string to check for 'loop' or loop-mis-identities
                             for(var f = 1; e+f < possibleFor.length && f < 4; ++f)
                             {
-                                if(loopText.localeCompare(possibleFor[e + f]) == 0)
+                                if(loopText.localeCompare(possibleFor[i + f]) == 0)
                                 {
                                     return true;
                                 }
@@ -302,7 +301,7 @@
                                 {
                                     for(var g = 0; g < common_Loop_Parse_MisIdentities.length; ++g)
                                     {
-                                        if(common_Loop_Parse_MisIdentities[g].localeCompare(possibleFor[e + f]) == 0)
+                                        if(common_Loop_Parse_MisIdentities[g].localeCompare(possibleFor[i + f]) == 0)
                                         {
                                             //TODO: For now still return true, but in future have way to account for fact that there is less certainty about this...
                                             return true;
@@ -446,12 +445,3 @@
 
     });
 })(jQuery);
-
-function interpret(input){
-    if(input.indexOf("create") != -1){
-        if(input.indexOf("for") != -1 || input.indexOf("4") != -1)
-            return "for(;;){}";
-    }
-
-    return "";
-}
