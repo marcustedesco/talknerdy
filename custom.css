@@ -8,6 +8,33 @@ button{
 	border:0;
 }
 
+.band {
+  background-color: black;
+  height: 8px;
+  float: left;
+}
+
+.color1 {
+  width: 19%;
+  background-color: #660000;
+}
+.color2 {
+  width: 11%;
+  background-color: #ff6600;
+}
+.color3 {
+  width: 26%;
+  background-color: black;
+}
+.color4 {
+  width: 35%;
+  background-color: green;
+}
+.color5 {
+  width: 9%;
+  background-color: blue;
+}
+
 .commandlist tr,td{
 	border: 2px solid #ff6600;
 	padding:3px;
